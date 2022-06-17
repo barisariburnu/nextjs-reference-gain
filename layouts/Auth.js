@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import supabase from "lib/supabase";
 
 // components
 
@@ -6,6 +8,16 @@ import Navbar from "components/Navbars/AuthNavbar.js";
 import FooterSmall from "components/Footers/FooterSmall.js";
 
 export default function Auth({ children }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = supabase.auth.user();
+
+    if (user) {
+      return router.push('/admin/dashboard');
+    }
+  }, []);
+
   return (
     <>
       <Navbar transparent />

@@ -1,20 +1,37 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
+import supabase from "lib/supabase";
+import { useRouter } from "next/router";
 
 const UserDropdown = () => {
+  const router = useRouter();
+
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
   const btnDropdownRef = React.createRef();
   const popoverDropdownRef = React.createRef();
+
   const openDropdownPopover = () => {
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
       placement: "bottom-start",
     });
     setDropdownPopoverShow(true);
   };
+
   const closeDropdownPopover = () => {
     setDropdownPopoverShow(false);
   };
+
+  const logout = async (e) => {
+    e.preventDefault();
+
+    const { error } = await supabase.auth.signOut();
+
+    if (!error) {
+      return router.push('/');
+    }
+  };
+
   return (
     <>
       <a
@@ -76,9 +93,9 @@ const UserDropdown = () => {
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
-          onClick={(e) => e.preventDefault()}
+          onClick={logout}
         >
-          Seprated link
+          Logout
         </a>
       </div>
     </>

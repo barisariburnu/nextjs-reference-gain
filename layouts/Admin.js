@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import supabase from "lib/supabase";
 
 // components
 
@@ -8,6 +10,16 @@ import HeaderStats from "components/Headers/HeaderStats.js";
 import FooterAdmin from "components/Footers/FooterAdmin.js";
 
 export default function Admin({ children }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = supabase.auth.user();
+
+    if (!user) {
+      router.push('/');
+    }
+  }, []);
+
   return (
     <>
       <Sidebar />
